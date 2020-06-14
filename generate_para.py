@@ -4,6 +4,7 @@ import re
 
 
 def find_language(language, text):
+    language = language.lower()
     zh_mark = ["zh", "ch", "cn"]
     ja_mark = ["ja", "jp"]
     zh_ja_mark = ["Default"]
