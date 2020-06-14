@@ -7,7 +7,8 @@ from resource.langconv import Converter
 
 j_t = janome_tokenizer()
 def segment_janome(line):
-    return [token for token in j_t.tokenize(line, wakati=True)]
+    seg = [token for token in j_t.tokenize(line, wakati=True)]
+    return [word for word in seg if word != ""]
 
 m_t = MeCab.Tagger()
 def segment_mecab(line):
@@ -17,11 +18,12 @@ def segment_mecab(line):
         if not m.surface == "":
             output_list.append(m.surface)
         m = m.next
-    return output_list
+    return [word for word in output_list if word != ""]
 
 def segment_jieba(line):
     line = Converter('zh-hans').convert(line).encode('utf-8')
-    return list(jieba.cut(line))
+    seg = list(jieba.cut(line))
+    return [word for word in seg if word != ""]
 
 def main(zh_method="jieba", ja_method="janome"):
     with open("./text/zh.txt", "r", encoding="utf-8") as f:

@@ -3,7 +3,7 @@ import codecs
 import re
 
 
-def find_language(language, text):
+def find_language_ass(language, text):
     language = language.lower()
     zh_mark = ["zh", "ch", "cn"]
     ja_mark = ["ja", "jp"]
@@ -48,7 +48,7 @@ def load_ass(file_path):
         time_code = line_split[1] + "|" + line_split[2]
         language = line_split[3]
         text = line_split[-1]
-        lang = find_language(language, text)
+        lang = find_language_ass(language, text)
         if lang == "zh_ja":
             text = text.replace("\\N", "")
             text = re.sub(u"\\{.*?\\}", "\t", text)
@@ -80,7 +80,7 @@ def load_ass(file_path):
 def load_ass_all():
     zh_ass = []
     ja_ass = []
-    for root, dirs, files in os.walk("./text/"):
+    for root, dirs, files in os.walk("./text/ass/"):
         for name in files:
             if len(name) > 4:
                 if name[-4:] == ".ass":
@@ -91,6 +91,41 @@ def load_ass_all():
     print(f"Load from ass:{len(zh_ass)}")
 
     return zh_ass, ja_ass
+
+def load_lrc(file_path):
+    f = codecs.open(file_path, 'r', encoding='utf-8', errors='ignore')
+    lines = f.readlines()
+    f.close()
+    lines = [line.strip() for line in lines if line.find("|") != -1]
+    zh_lrc = []
+    ja_lrc = []
+    for line in lines:
+        st_index = line.find("]")
+        use_line = line[st_index + 1:]
+        try:
+            ja_tmp, zh_tmp = use_line.split("|")
+            if len(zh_tmp) > 0:
+                zh_lrc.append(zh_tmp)
+                ja_lrc.append(ja_tmp)
+        except BaseException:
+            pass
+    
+    return zh_lrc, ja_lrc
+
+def load_lrc_all():
+    zh_lrc = []
+    ja_lrc = []
+    for root, dirs, files in os.walk("./text/Lyrics/lrc/"):
+        for name in files:
+            if len(name) > 4:
+                if name[-4:] == ".lrc":
+                    zh_tmp, ja_tmp = load_lrc(os.path.join(root, name))
+                    zh_lrc.extend(zh_tmp)
+                    ja_lrc.extend(ja_tmp)
+
+    print(f"Load from lyrics:{len(zh_lrc)}")
+
+    return zh_lrc, ja_lrc
 
 def load_zh_ja():
     zh_list = []
@@ -111,6 +146,10 @@ def load_zh_ja():
 def main():
     zh_all = []
     ja_all = []
+
+    zh_lyc, ja_lrc = load_lrc_all()
+    zh_all.extend(zh_lyc)
+    ja_all.extend(ja_lrc)
 
     zh_ass, ja_ass = load_ass_all()
     zh_all.extend(zh_ass)

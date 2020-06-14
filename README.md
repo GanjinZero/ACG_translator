@@ -13,4 +13,4 @@ The model architecture is Transformer.
 | :--------: | :---: | :----------------------------------------------: | :------: |
 | JParaCrawl |  84K  | <http://www.kecl.ntt.co.jp/icl/lirg/jparacrawl/> | General  |
 | AnimeSubtitle |  25K  |   From Internet  | Anime |
-
+| AnimeLyrics |  32K  |   From NetEase Music  | Anime & Game |
