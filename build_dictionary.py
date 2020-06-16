@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
 
+# from subword-nmt
+
 from collections import OrderedDict
 import fileinput
 import sys

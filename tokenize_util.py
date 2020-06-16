@@ -77,3 +77,4 @@ def main(zh_method="jieba", ja_method="janome"):
 
 if __name__ == "__main__":
     main(zh_method="jieba", ja_method="mecab")
+

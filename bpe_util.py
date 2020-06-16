@@ -3,9 +3,9 @@ import json
 from collections import OrderedDict
 
 
-def learn_bpe(num_operations, vocabulary_threshold):
+def learn_bpe(num_operations, vocabulary_threshold, bpe_model_overwrite=False):
     print("Learn BPE")
-    if os.path.exists(f"./bpe_model/zh_ja_{num_operations}_bpe.model"):
+    if os.path.exists(f"./bpe_model/zh_ja_{num_operations}_bpe.model") and not bpe_model_overwrite:
         print(f"Found ./bpe_model/zh_ja_{num_operations}_bpe.model")
     else:
         os.system(f"subword-nmt learn-bpe -v -s {num_operations} < ./text/bpe_train.txt > ./bpe_model/zh_ja_{num_operations}_bpe.model")
@@ -24,6 +24,8 @@ def learn_bpe(num_operations, vocabulary_threshold):
 
     print("Build dictionary")
     os.system(f"python build_dictionary.py ./text/zh.bpe ./text/ja.bpe")
+    os.system(f"python build_vocab.py ./text/zh.bpe ./text/vocab_{num_operations}_zh")
+    os.system(f"python build_vocab.py ./text/ja.bpe ./text/vocab_{num_operations}_ja")
 
     print("Build zh_ja dictionary")
     zh_bpe_json = json.load(open('./text/zh.bpe.json', 'r', encoding="utf-8"))
@@ -63,7 +65,7 @@ def main(num_operations=50000, vocabulary_threshold=None):
         for line in ja_lines:
             f.write(line.strip() + "\n")
     
-    learn_bpe(num_operations, vocabulary_threshold)
+    learn_bpe(num_operations, vocabulary_threshold, bpe_model_overwrite=False)
     
 if __name__ == "__main__":
     main()

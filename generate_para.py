@@ -1,6 +1,7 @@
 import os
 import codecs
 import re
+from sklearn.utils import shuffle
 
 
 def find_language_ass(language, text):
@@ -146,18 +147,25 @@ def load_zh_ja():
 def main():
     zh_all = []
     ja_all = []
+    use_list = ["lrc", "ass"]
 
-    zh_lyc, ja_lrc = load_lrc_all()
-    zh_all.extend(zh_lyc)
-    ja_all.extend(ja_lrc)
+    if "lrc" in use_list:
+        zh_lrc, ja_lrc = load_lrc_all()
+        zh_all.extend(zh_lrc)
+        ja_all.extend(ja_lrc)
 
-    zh_ass, ja_ass = load_ass_all()
-    zh_all.extend(zh_ass)
-    ja_all.extend(ja_ass)
-    
-    zh_list, ja_list = load_zh_ja()
-    zh_all.extend(zh_list)
-    ja_all.extend(ja_list)
+    if "ass" in use_list:
+        zh_ass, ja_ass = load_ass_all()
+        zh_all.extend(zh_ass)
+        ja_all.extend(ja_ass)
+
+    if "general" in use_list:
+        zh_list, ja_list = load_zh_ja()
+        zh_all.extend(zh_list)
+        ja_all.extend(ja_list)
+
+    # Add shuffle
+    zh_all, ja_all = shuffle(zh_all, ja_all)
 
     with open("./text/zh.txt", "w", encoding="utf-8") as f:
         for line in zh_all:
