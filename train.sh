@@ -1,7 +1,8 @@
 DATADIR=./text
+VOCABDIR=./bpe_model
 thumt-trainer \
-  --input $DATADIR/ja.bpe $DATADIR/zh.bpe \
-  --vocabulary $DATADIR/vocab_50000_ja.txt $DATADIR/vocab_50000_zh.txt \
+  --input $DATADIR/ja_train.bpe $DATADIR/zh_train.bpe \
+  --vocabulary $VOCABDIR/vocab_50000_ja.txt $VOCABDIR/vocab_50000_zh.txt \
   --model transformer \
   --validation $DATADIR/ja_test.bpe \
   --references $DATADIR/zh_segment_test.txt \

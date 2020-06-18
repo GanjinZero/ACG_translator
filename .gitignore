@@ -2,6 +2,8 @@ text/
 crass-source/
 .vscode/*
 bpe_model/*
+train/*
+temp/*
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

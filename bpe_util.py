@@ -5,6 +5,8 @@ from collections import OrderedDict
 
 def learn_bpe(num_operations, vocabulary_threshold, bpe_model_overwrite=False):
     print("Learn BPE")
+    if not os.path.exists("./bpe_model/"):
+        os.makedirs("bpe_model")
     if os.path.exists(f"./bpe_model/zh_ja_{num_operations}_bpe.model") and not bpe_model_overwrite:
         print(f"Found ./bpe_model/zh_ja_{num_operations}_bpe.model")
     else:
@@ -12,24 +14,25 @@ def learn_bpe(num_operations, vocabulary_threshold, bpe_model_overwrite=False):
     
     print("Apply BPE")
     if vocabulary_threshold is None:
-        os.system(f"subword-nmt apply-bpe -c ./bpe_model/zh_ja_{num_operations}_bpe.model < ./text/zh_segment.txt > ./text/zh.bpe")
-        os.system(f"subword-nmt apply-bpe -c ./bpe_model/zh_ja_{num_operations}_bpe.model < ./text/ja_segment.txt > ./text/ja.bpe")
-        os.system(f"subword-nmt apply-bpe -c ./bpe_model/zh_ja_{num_operations}_bpe.model < ./text/zh_segment_test.txt > ./text/zh_test.bpe")
+        os.system(f"subword-nmt apply-bpe -c ./bpe_model/zh_ja_{num_operations}_bpe.model < ./text/zh_segment.txt > ./text/zh_train.bpe")
+        os.system(f"subword-nmt apply-bpe -c ./bpe_model/zh_ja_{num_operations}_bpe.model < ./text/ja_segment.txt > ./text/ja_train.bpe")
+        #os.system(f"subword-nmt apply-bpe -c ./bpe_model/zh_ja_{num_operations}_bpe.model < ./text/zh_segment_test.txt > ./text/zh_test.bpe")
         os.system(f"subword-nmt apply-bpe -c ./bpe_model/zh_ja_{num_operations}_bpe.model < ./text/ja_segment_test.txt > ./text/ja_test.bpe")
     else:
-        os.system(f"subword-nmt apply-bpe -c ./bpe_model/zh_ja_{num_operations}_bpe.model --vocabulary-threshold {vocabulary_threshold} < ./text/zh_segment.txt > ./text/zh.bpe")
-        os.system(f"subword-nmt apply-bpe -c ./bpe_model/zh_ja_{num_operations}_bpe.model --vocabulary-threshold {vocabulary_threshold} < ./text/ja_segment.txt > ./text/ja.bpe")
-        os.system(f"subword-nmt apply-bpe -c ./bpe_model/zh_ja_{num_operations}_bpe.model --vocabulary-threshold {vocabulary_threshold} < ./text/zh_segment_test.txt > ./text/zh_test.bpe")
+        os.system(f"subword-nmt apply-bpe -c ./bpe_model/zh_ja_{num_operations}_bpe.model --vocabulary-threshold {vocabulary_threshold} < ./text/zh_segment.txt > ./text/zh_train.bpe")
+        os.system(f"subword-nmt apply-bpe -c ./bpe_model/zh_ja_{num_operations}_bpe.model --vocabulary-threshold {vocabulary_threshold} < ./text/ja_segment.txt > ./text/ja_train.bpe")
+        #os.system(f"subword-nmt apply-bpe -c ./bpe_model/zh_ja_{num_operations}_bpe.model --vocabulary-threshold {vocabulary_threshold} < ./text/zh_segment_test.txt > ./text/zh_test.bpe")
         os.system(f"subword-nmt apply-bpe -c ./bpe_model/zh_ja_{num_operations}_bpe.model --vocabulary-threshold {vocabulary_threshold} < ./text/ja_segment_test.txt > ./text/ja_test.bpe")
 
     print("Build dictionary")
-    os.system(f"python build_dictionary.py ./text/zh.bpe ./text/ja.bpe")
-    os.system(f"python build_vocab.py ./text/zh.bpe ./text/vocab_{num_operations}_zh")
-    os.system(f"python build_vocab.py ./text/ja.bpe ./text/vocab_{num_operations}_ja")
+    #os.system(f"python build_dictionary.py ./text/zh_train.bpe ./text/ja_train.bpe")
+    os.system(f"python build_vocab.py ./text/zh_train.bpe ./bpe_model/vocab_{num_operations}_zh")
+    os.system(f"python build_vocab.py ./text/ja_train.bpe ./bpe_model/vocab_{num_operations}_ja")
 
+    """
     print("Build zh_ja dictionary")
-    zh_bpe_json = json.load(open('./text/zh.bpe.json', 'r', encoding="utf-8"))
-    ja_bpe_json = json.load(open('./text/ja.bpe.json', 'r', encoding="utf-8"))
+    zh_bpe_json = json.load(open('./text/zh_train.bpe.json', 'r', encoding="utf-8"))
+    ja_bpe_json = json.load(open('./text/ja_train.bpe.json', 'r', encoding="utf-8"))
     zh_dict = [word for word, index in zh_bpe_json.items()]
     ja_dict = [word for word, index in ja_bpe_json.items()]
     zh_ja_dict = set(zh_dict + ja_dict)
@@ -51,6 +54,7 @@ def learn_bpe(num_operations, vocabulary_threshold, bpe_model_overwrite=False):
         json.dump(word2id, f, indent=2, ensure_ascii=False)
     with open('./text/id2word.json', 'w', encoding='utf-8') as f:
         json.dump(id2word, f, indent=2, ensure_ascii=False)
+    """
 
     return
 

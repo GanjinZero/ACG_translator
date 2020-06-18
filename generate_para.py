@@ -131,7 +131,7 @@ def load_lrc_all():
 def load_zh_ja():
     zh_list = []
     ja_list = []
-    f = codecs.open('./text/zh-ja.bicleaner05.txt', 'r', encoding='utf-8', errors='ignore')
+    f = codecs.open('./text/general/zh-ja.bicleaner05.txt', 'r', encoding='utf-8', errors='ignore')
     lines = f.readlines()
     f.close()
 
@@ -140,14 +140,14 @@ def load_zh_ja():
         zh_list.append(zh)
         ja_list.append(ja)
 
-    print(f"Load from ./text/zh-ja.bicleaner05.txt:{len(zh_list)}")
+    print(f"Load from general:{len(zh_list)}")
     
     return zh_list, ja_list
 
 def main():
     zh_all = []
     ja_all = []
-    use_list = ["lrc", "ass"]
+    use_list = ["lrc", "ass", "general"]
 
     if "lrc" in use_list:
         zh_lrc, ja_lrc = load_lrc_all()
