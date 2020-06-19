@@ -2,6 +2,9 @@ import os
 import sys
 from tokenize_util import segment_janome, segment_mecab, convert_ja2zh
 
+
+os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
+
 def translate_one_sentence(ja_line, ja_method="mecab"):
     return translate_sentences([ja_line], ja_method)
 
@@ -54,10 +57,10 @@ def main(argv):
             output_path = argv[2]
             with open(output_path, "w", encoding="utf-8") as f:
                 for line in zh_lines:
-                    f.write(line.strip() + "\n")
+                    f.write(line.strip())
         else:
             for line in zh_lines:
-                print(line)
+                print(line.strip())
     else:
         ja_lines = []
         for i in range(len(argv) - 1):
@@ -65,7 +68,7 @@ def main(argv):
             ja_lines.append(ja_line)
         zh_lines = translate_sentences(ja_lines)
         for line in zh_lines:
-            print(line)
+            print(line.strip())
 
 if __name__ == "__main__":
     main(sys.argv)

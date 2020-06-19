@@ -18,7 +18,7 @@ def load_transfer():
                 zh2jp[zh] = jp
                 jp2zh[jp] = zh
     
-    print("Load", len(zh2jp), "characters from zh_jp_transfer.txt.")
+    #print("Load", len(zh2jp), "characters from zh_jp_transfer.txt.")
     return zh2jp, jp2zh
 
 if __name__ == "__main__":
