@@ -30,7 +30,7 @@ def translate_sentences(ja_lines, ja_method="mecab", verbose=False):
                    --models transformer \
                    --input ./temp/ja_predict.bpe \
                    --output ./temp/zh_predict.txt \
-                   --vocabulary ./bpe_model/vocab_50000_ja.txt ./bpe_model/vocab_50000_zh.txt \
+                   --vocabulary ./bpe_model/vocab_50000_zh_ja.txt ./bpe_model/vocab_50000_zh_ja.txt \
                    --checkpoints train/eval \
                    --parameters=device_list=[0],decode_alpha=1.2" + verbose_tag)
     os.system("sed -r 's/(@@ )|(@@ ?$)//g' < ./temp/zh_predict.txt > ./temp/output.txt")
