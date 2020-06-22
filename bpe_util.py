@@ -4,6 +4,7 @@ from collections import OrderedDict
 
 
 def learn_bpe(num_operations, vocabulary_threshold, bpe_model_overwrite=False):
+    """
     print("Learn BPE")
     if not os.path.exists("./bpe_model/"):
         os.makedirs("bpe_model")
@@ -23,11 +24,11 @@ def learn_bpe(num_operations, vocabulary_threshold, bpe_model_overwrite=False):
         os.system(f"subword-nmt apply-bpe -c ./bpe_model/zh_ja_{num_operations}_bpe.model --vocabulary-threshold {vocabulary_threshold} < ./text/ja_segment.txt > ./text/ja_train.bpe")
         #os.system(f"subword-nmt apply-bpe -c ./bpe_model/zh_ja_{num_operations}_bpe.model --vocabulary-threshold {vocabulary_threshold} < ./text/zh_segment_test.txt > ./text/zh_test.bpe")
         os.system(f"subword-nmt apply-bpe -c ./bpe_model/zh_ja_{num_operations}_bpe.model --vocabulary-threshold {vocabulary_threshold} < ./text/ja_segment_test.txt > ./text/ja_test.bpe")
-
+    """
     print("Build dictionary")
     #os.system(f"python build_dictionary.py ./text/zh_train.bpe ./text/ja_train.bpe")
-    os.system(f"python build_vocab.py ./text/zh_train.bpe ./bpe_model/vocab_{num_operations}_zh")
-    os.system(f"python build_vocab.py ./text/ja_train.bpe ./bpe_model/vocab_{num_operations}_ja")
+    os.system(f"cat ./text/zh_train.bpe ./text/ja_train.bpe >> ./text/zh_ja_train.bpe")
+    os.system(f"python build_vocab.py ./text/zh_ja_train.bpe ./bpe_model/vocab_{num_operations}_zh_ja")
 
     """
     print("Build zh_ja dictionary")
