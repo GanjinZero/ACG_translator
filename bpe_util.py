@@ -69,7 +69,7 @@ def main(num_operations=50000, vocabulary_threshold=None):
         for line in ja_lines:
             f.write(line.strip() + "\n")
     
-    learn_bpe(num_operations, vocabulary_threshold, bpe_model_overwrite=False)
+    learn_bpe(num_operations, vocabulary_threshold, bpe_model_overwrite=True)
     
 if __name__ == "__main__":
     main()

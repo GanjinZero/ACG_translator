@@ -144,10 +144,33 @@ def load_zh_ja():
     
     return zh_list, ja_list
 
+def load_dc2pc():
+    zh_list = []
+    ja_list = []
+    with open("./text/game/dc2pc_zh.txt", "r", encoding="utf-8") as f:
+        lines = f.readlines()
+    zh_list = lines
+    with open("./text/game/dc2pc_ja.txt", "r", encoding="utf-8") as f:
+        lines = f.readlines()
+    ja_list = lines
+    return zh_list, ja_list
+
+
+def load_game():
+    zh_list = []
+    ja_list = []
+    zh_dc2pc, ja_dc2pc = load_dc2pc()
+    zh_list.extend(zh_dc2pc)
+    ja_list.extend(ja_dc2pc)
+
+    print(f"Load from game:{len(zh_list)}")
+
+    return zh_list, ja_list
+
 def main():
     zh_all = []
     ja_all = []
-    use_list = ["lrc", "ass", "general"]
+    use_list = ["lrc", "ass", "general", "game"]
 
     if "lrc" in use_list:
         zh_lrc, ja_lrc = load_lrc_all()
@@ -164,16 +187,32 @@ def main():
         zh_all.extend(zh_list)
         ja_all.extend(ja_list)
 
+    if "game" in use_list:
+        zh_game, ja_game = load_game()
+        zh_all.extend(zh_game)
+        ja_all.extend(ja_game)
+
     # Add shuffle
     zh_all, ja_all = shuffle(zh_all, ja_all)
 
+    # Remove repeat
+    repeat_set = set()
+    output_index = []
+    for i in range(len(zh_all)):
+        zh_ja = zh_all[i] + "\t" + ja_all[i]
+        if zh_ja in repeat_set:
+            continue
+        else:
+            output_index.append(i)
+            repeat_set.update([zh_ja])
+
     with open("./text/zh.txt", "w", encoding="utf-8") as f:
-        for line in zh_all:
-            f.write(line + "\n")
+        for i in output_index:
+            f.write(zh_all[i].strip() + "\n")
 
     with open("./text/ja.txt", "w", encoding="utf-8") as f:
-        for line in ja_all:
-            f.write(line + "\n")
+        for i in output_index:
+            f.write(ja_all[i].strip() + "\n")
 
 if __name__ == "__main__":
     main()

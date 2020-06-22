@@ -57,10 +57,10 @@ def main(argv):
             output_path = argv[2]
             with open(output_path, "w", encoding="utf-8") as f:
                 for line in zh_lines:
-                    f.write(line.strip())
+                    f.write(line.strip() + "\n")
         else:
             for line in zh_lines:
-                print(line.strip())
+                print(line.strip() + "\n")
     else:
         ja_lines = []
         for i in range(len(argv) - 1):
@@ -68,7 +68,7 @@ def main(argv):
             ja_lines.append(ja_line)
         zh_lines = translate_sentences(ja_lines)
         for line in zh_lines:
-            print(line.strip())
+            print(line.strip() + "\n")
 
 if __name__ == "__main__":
     main(sys.argv)

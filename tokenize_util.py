@@ -2,21 +2,24 @@ from janome.tokenizer import Tokenizer as janome_tokenizer
 import jieba
 import MeCab
 from tqdm import tqdm
-from resource.langconv import Converter
 from random import sample
-from resource.load_zh_jp_transfer import load_transfer
+try:
+    from resource.langconv import Converter
+    from resource.load_zh_jp_transfer import load_transfer
 
 
-zh2jp, jp2zh = load_transfer()
+    zh2jp, jp2zh = load_transfer()
 
-def convert_ja2zh(line):
-    opt_line = []
-    for ch in line:
-        if ch in jp2zh:
-            opt_line.append(jp2zh[ch])
-        else:
-            opt_line.append(ch)
-    return "".join(opt_line)
+    def convert_ja2zh(line):
+        opt_line = []
+        for ch in line:
+            if ch in jp2zh:
+                opt_line.append(jp2zh[ch])
+            else:
+                opt_line.append(ch)
+        return "".join(opt_line)
+except BaseException:
+    pass
 
 
 j_t = janome_tokenizer()
@@ -35,7 +38,10 @@ def segment_mecab(line):
     return [word for word in output_list if word != ""]
 
 def segment_jieba(line):
-    line = Converter('zh-hans').convert(line).encode('utf-8')
+    try:
+        line = Converter('zh-hans').convert(line).encode('utf-8')
+    except BaseException:
+        pass
     seg = list(jieba.cut(line))
     return [word for word in seg if word != ""]
 

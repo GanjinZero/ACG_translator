@@ -4,6 +4,7 @@ crass-source/
 bpe_model/*
 train/*
 temp/*
+align/dc2pc/*
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
